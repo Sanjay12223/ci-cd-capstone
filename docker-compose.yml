@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    image: Sanjay12223/cicd-frontend:staging-latest
+    image: sanjay12223/cicd-frontend:staging-latest
     container_name: cicd-frontend
     ports:
       - "80:80"
@@ -13,7 +13,7 @@ services:
       - app-network
 
   backend:
-    image: Sanjay12223/cicd-backend:staging-latest
+    image: sanjay12223/cicd-backend:staging-latest
     container_name: cicd-backend
     ports:
       - "5000:5000"
