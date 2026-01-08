@@ -2,18 +2,19 @@ version: "3.9"
 
 services:
   frontend:
-    build: ./frontend
-    image: cicd-frontend:staging
+    image: Sanjay12223/cicd-frontend:staging-latest
+    container_name: cicd-frontend
     ports:
       - "80:80"
     depends_on:
       - backend
+    restart: always
     networks:
       - app-network
 
   backend:
-    build: ./backend
-    image: cicd-backend:staging
+    image: Sanjay12223/cicd-backend:staging-latest
+    container_name: cicd-backend
     ports:
       - "5000:5000"
     environment:
@@ -23,6 +24,7 @@ services:
       DB_PASSWORD: admin
     depends_on:
       - db
+    restart: always
     networks:
       - app-network
 
@@ -36,6 +38,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
     networks:
       - app-network
 
@@ -44,3 +47,4 @@ volumes:
 
 networks:
   app-network:
+    driver: bridge

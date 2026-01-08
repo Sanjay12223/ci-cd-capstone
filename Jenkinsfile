@@ -51,8 +51,18 @@ pipeline {
                 )]) {
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+                    # Push build-specific tags
                     docker push $BACKEND_IMAGE:$TAG
                     docker push $FRONTEND_IMAGE:$TAG
+
+                    # Tag images for staging deployment
+                    docker tag $BACKEND_IMAGE:$TAG $BACKEND_IMAGE:staging-latest
+                    docker tag $FRONTEND_IMAGE:$TAG $FRONTEND_IMAGE:staging-latest
+
+                    # Push staging-latest tags
+                    docker push $BACKEND_IMAGE:staging-latest
+                    docker push $FRONTEND_IMAGE:staging-latest
                     '''
                 }
             }
