@@ -36,8 +36,13 @@ pipeline {
         stage('Security Scan (Trivy)') {
             steps {
                 sh '''
-                trivy image --exit-code 0 $BACKEND_IMAGE:$TAG
-                trivy image --exit-code 0 $FRONTEND_IMAGE:$TAG
+                docker run --rm \
+                  -v /var/run/docker.sock:/var/run/docker.sock \
+                  aquasec/trivy:latest image --exit-code 0 $BACKEND_IMAGE:$TAG
+
+                docker run --rm \
+                  -v /var/run/docker.sock:/var/run/docker.sock \
+                  aquasec/trivy:latest image --exit-code 0 $FRONTEND_IMAGE:$TAG
                 '''
             }
         }
@@ -50,7 +55,7 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push $BACKEND_IMAGE:$TAG
                     docker push $FRONTEND_IMAGE:$TAG
                     '''
