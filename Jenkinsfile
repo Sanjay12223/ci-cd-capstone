@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "docker.io/sanjay12223"
+        REGISTRY = "docker.io/sanjay9898"
         BACKEND_IMAGE = "${REGISTRY}/cicd-backend"
         FRONTEND_IMAGE = "${REGISTRY}/cicd-frontend"
         TAG = "staging-${BUILD_NUMBER}"
@@ -50,16 +50,9 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push $BACKEND_IMAGE:$TAG
                     docker push $FRONTEND_IMAGE:$TAG
-
-                    docker tag $BACKEND_IMAGE:$TAG $BACKEND_IMAGE:staging-latest
-                    docker tag $FRONTEND_IMAGE:$TAG $FRONTEND_IMAGE:staging-latest
-
-                    docker push $BACKEND_IMAGE:staging-latest
-                    docker push $FRONTEND_IMAGE:staging-latest
                     '''
                 }
             }
